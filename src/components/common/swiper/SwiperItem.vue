@@ -1,6 +1,8 @@
 <!--  -->
 <template>
-  <div class="swiperitem"></div>
+  <div class="swiperitem">
+    <slot></slot>
+  </div>
 </template>
 
 <script>
@@ -11,4 +13,11 @@ export default {
 </script>
 
 <style scoped>
+.swiperitem{
+  flex-shrink: 0;
+  width: 100%
+}
+.swiperitem img{
+  width: 100%
+}
 </style>
