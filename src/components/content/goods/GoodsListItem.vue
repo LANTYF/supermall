@@ -1,7 +1,7 @@
 <!--  -->
 <template>
-  <div class="goodslistitem">
-    <img :src="goodsitem.show.img" alt />
+  <div class="goodslistitem" @click="toDetail">
+    <img :src="goodsitem.show.img" alt @load="itemLoad" />
     <div class="goods-info">
       <p class="titile">{{goodsitem.title}}</p>
       <span class="price">{{goodsitem.price}}</span>
@@ -20,7 +20,15 @@ export default {
         return {};
       }
     }
-  }
+  },
+  methods: {
+    itemLoad() {
+      this.$bus.$emit("itemLoad");
+    },
+    toDetail() {
+      this.$router.push('/detail' + this.goodsitem.iid)
+    }
+  },
 };
 </script>
 
@@ -28,7 +36,7 @@ export default {
 .goodslistitem {
   padding-bottom: 40px;
   position: relative;
-  width: 48%
+  width: 48%;
 }
 .goodslistitem img {
   width: 100%;

@@ -1,7 +1,9 @@
 <!--  -->
 <template>
   <div class="maintabbar">
-    <router-view></router-view>
+    <keep-alive exclude="Detail">
+      <router-view></router-view>
+    </keep-alive>
     <TabBar>
       <TabBarItem path='/home'>
         <template v-slot:img>

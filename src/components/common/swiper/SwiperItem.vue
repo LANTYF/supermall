@@ -1,6 +1,6 @@
 <!--  -->
 <template>
-  <div class="swiperitem">
+  <div class="swiperitem"  ref="swiperitem">
     <slot></slot>
   </div>
 </template>
