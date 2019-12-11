@@ -2,62 +2,12 @@
 <template>
   <div id="detail">
     <DetailNavBar class="navbar"></DetailNavBar>
-    <Scroll class="wrapper">
+    <Scroll class="wrapper" ref="scroll" :click="true">
       <DetailSwiper :topImages="topImages"></DetailSwiper>
       <DetailMessage :goods="goods"></DetailMessage>
       <DetailShop :shop="shop"></DetailShop>
-      <ul>
-        <li>1</li>
-        <li>2</li>
-        <li>3</li>
-        <li>4</li>
-        <li>5</li>
-        <li>6</li>
-        <li>7</li>
-        <li>8</li>
-        <li>9</li>
-        <li>10</li>
-        <li>11</li>
-        <li>12</li>
-        <li>13</li>
-        <li>14</li>
-        <li>15</li>
-        <li>16</li>
-        <li>17</li>
-        <li>18</li>
-        <li>19</li>
-        <li>20</li>
-        <li>21</li>
-        <li>22</li>
-        <li>23</li>
-        <li>24</li>
-        <li>25</li>
-        <li>26</li>
-        <li>27</li>
-        <li>28</li>
-        <li>29</li>
-        <li>30</li>
-        <li>31</li>
-        <li>32</li>
-        <li>33</li>
-        <li>34</li>
-        <li>35</li>
-        <li>36</li>
-        <li>37</li>
-        <li>38</li>
-        <li>39</li>
-        <li>40</li>
-        <li>41</li>
-        <li>42</li>
-        <li>43</li>
-        <li>44</li>
-        <li>45</li>
-        <li>46</li>
-        <li>47</li>
-        <li>48</li>
-        <li>49</li>
-        <li>50</li>
-      </ul>
+      <DetailInfo :detailInfo="detailInfo" @imgLoad="imgLoad"></DetailInfo>
+      <DetailParams :paramsInfo="paramsInfo"></DetailParams>
     </Scroll>
   </div>
 </template>
@@ -69,8 +19,10 @@ import DetailNavBar from "./childdetail/DetailNavBar";
 import DetailSwiper from "./childdetail/DetailSwiper";
 import DetailMessage from "./childdetail/DetailMessage";
 import DetailShop from "./childdetail/DetailShop";
+import DetailInfo from './childdetail/DetailInfo'
+import DetailParams from './childdetail/DetailParams'
 
-import { getDetailData, Goods, Shop } from "network/detail.js";
+import { getDetailData, Goods, Shop , ParamsInfo} from "network/detail.js";
 
 export default {
   name: "Detail",
@@ -79,8 +31,10 @@ export default {
       iid: null,
       topImages: [],
       goods: {},
-      shop: {}
-    };
+      shop: {},
+      detailInfo:{},
+      paramsInfo:{}
+    }
   },
   components: {
     Scroll,
@@ -88,7 +42,9 @@ export default {
     DetailNavBar,
     DetailSwiper,
     DetailMessage,
-    DetailShop
+    DetailShop,
+    DetailInfo,
+    DetailParams
   },
   created() {
     //保存传入的iid
@@ -106,7 +62,16 @@ export default {
       );
       //获取商家信息
       this.shop = new Shop(data.shopInfo);
+      //获取商品详细信息
+      this.detailInfo = data.detailInfo
+      //获取尺寸参数
+      this.paramsInfo = new ParamsInfo(data.itemParams.info,data.itemParams.rule)
     });
+  },
+  methods:{
+    imgLoad() {
+      this.$refs.scroll.refresh()
+    }
   }
 };
 </script>
@@ -118,7 +83,7 @@ export default {
 }
 .wrapper{
  position: absolute;
- top: 48.8px;
+ top: 44px;
  bottom: 0;
  overflow: hidden;
  z-index: 9;

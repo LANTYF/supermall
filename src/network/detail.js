@@ -31,3 +31,10 @@ export class Shop {
     this.name = shopInfo.name
   }
 }
+
+export class ParamsInfo{
+  constructor(info,rule) {
+    this.set = info.set
+    this.tables = rule.tables
+  }
+}

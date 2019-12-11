@@ -61,6 +61,7 @@ export default {
 <style scoped>
 .shop {
   margin-top: 30px;
+  font-size: 12px
 }
 .shop img,
 .shop span {

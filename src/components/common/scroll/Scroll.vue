@@ -25,12 +25,16 @@ export default {
     pullUpLoad: {
       type: Boolean,
       default: false
+    },
+    click:{
+      type:Boolean,
+      default:false
     }
   },
   mounted() {
     this.scroll = new BScroll(this.$refs.wrapper, {
       probeType: this.probeType,
-      click: true,
+      click: this.click,
       pullUpLoad: this.pullUpLoad
     });
     if (this.probeType === 2 || this.probeType === 3) {

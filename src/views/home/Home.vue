@@ -17,6 +17,7 @@
       class="wrapper"
       :probeType="3"
       :pullUpLoad="true"
+      :click="true"
       ref="scroll"
       @scroll="contentScroll"
       @pullingUp="loadMore"
@@ -70,7 +71,8 @@ export default {
       currentType: "pop",
       isShow: false,
       isFixed: false,
-      tabControlHeight: 0
+      tabControlHeight: 0,
+      saveY:0
     };
   },
   created() {
@@ -86,6 +88,14 @@ export default {
     this.$bus.$on("itemLoad", () => {
       refresh();
     });
+  },
+  activated() {
+    this.$refs.scroll.scrollTo(0,this.saveY,0);
+    this.$refs.scroll.refresh()
+  },
+  deactivated() {
+    this.saveY = this.$refs.scroll.scroll.y
+    console.log(this.saveY);
   },
   computed: {
     showGoods() {
@@ -115,7 +125,7 @@ export default {
     },
     contentScroll(position) {
       this.isShow = -position.y > 1000;
-      this.isFixed = -position.y > this.tabControlHeight
+      this.isFixed = -position.y > this.tabControlHeight;
     },
     loadMore() {
       this.gethomedata(this.currentType);

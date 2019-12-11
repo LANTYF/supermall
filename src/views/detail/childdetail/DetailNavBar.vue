@@ -45,6 +45,9 @@ export default {
 </script>
 
 <style scoped>
+.back{
+  height: 44px;
+}
 .back img {
   margin-top: 10px;
   margin-left: 10px;
