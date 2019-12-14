@@ -1,7 +1,7 @@
 <!--  -->
 <template>
   <div class="goodslistitem" @click="toDetail">
-    <img :src="goodsitem.show.img" alt @load="itemLoad" />
+    <img :src="showImage" alt @load="itemLoad" />
     <div class="goods-info">
       <p class="titile">{{goodsitem.title}}</p>
       <span class="price">{{goodsitem.price}}</span>
@@ -29,6 +29,11 @@ export default {
       this.$router.push('/detail' + this.goodsitem.iid)
     }
   },
+  computed:{
+    showImage() {
+      return this.goodsitem.image || this.goodsitem.show.img
+    }
+  }
 };
 </script>
 
@@ -40,6 +45,7 @@ export default {
 }
 .goodslistitem img {
   width: 100%;
+  border-radius: 4px
 }
 
 .goods-info {

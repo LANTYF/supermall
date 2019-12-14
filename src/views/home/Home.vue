@@ -37,14 +37,13 @@ import NavBar from "components/common/navbar/NavBar";
 import Scroll from "components/common/scroll/Scroll";
 import TabControl from "components/content/tabcontrol/TabControl";
 import GoodsList from "components/content/goods/GoodsList";
-import BackTop from "components/content/backtop/BackTop";
 
 import HomeSwiper from "./childcomponents/HomeSwiper";
 import RecommendView from "./childcomponents/RecommendView";
 import FeatureView from "./childcomponents/FeatureView";
 
-import { gethomemultidata, gethomedata } from "network/home.js";
-import { debounce } from "common/utils.js";
+import { gethomemultidata, gethomedata } from "network/home";
+import { itemLoadMixin , backTopMixin} from "common/mixin";
 
 export default {
   name: "Home",
@@ -53,7 +52,6 @@ export default {
     Scroll,
     TabControl,
     GoodsList,
-    BackTop,
 
     HomeSwiper,
     RecommendView,
@@ -69,12 +67,12 @@ export default {
         sell: { page: 0, list: [] }
       },
       currentType: "pop",
-      isShow: false,
       isFixed: false,
       tabControlHeight: 0,
-      saveY:0
+      saveY: 0
     };
   },
+  mixins: [itemLoadMixin,backTopMixin],
   created() {
     //1请求多个数据
     this.gethomemultidata();
@@ -83,19 +81,13 @@ export default {
     this.gethomedata("new");
     this.gethomedata("sell");
   },
-  mounted() {
-    const refresh = debounce(this.$refs.scroll.refresh, 500);
-    this.$bus.$on("itemLoad", () => {
-      refresh();
-    });
-  },
   activated() {
-    this.$refs.scroll.scrollTo(0,this.saveY,0);
-    this.$refs.scroll.refresh()
+    this.$refs.scroll.scrollTo(0, this.saveY, 0);
+    this.$refs.scroll.refresh();
   },
   deactivated() {
-    this.saveY = this.$refs.scroll.scroll.y
-    console.log(this.saveY);
+    this.saveY = this.$refs.scroll.scroll.y;
+    this.$bus.$off("itemLoad", this.itemListener);
   },
   computed: {
     showGoods() {
@@ -118,10 +110,7 @@ export default {
           this.currentType = "sell";
       }
       this.$refs.tabControl1.currentIndex = index;
-      this.$refs.tabControl2.currentIndex = index
-    },
-    topClick() {
-      this.$refs.scroll.scrollTo(0, 0)
+      this.$refs.tabControl2.currentIndex = index;
     },
     contentScroll(position) {
       this.isShow = -position.y > 1000;
@@ -129,10 +118,10 @@ export default {
     },
     loadMore() {
       this.gethomedata(this.currentType);
-      this.$refs.scroll.refresh()
+      this.$refs.scroll.refresh();
     },
     imgLoad() {
-      this.tabControlHeight = this.$refs.tabControl2.$el.offsetTop
+      this.tabControlHeight = this.$refs.tabControl2.$el.offsetTop;
     },
     /**
      * 网络请求相关
@@ -140,7 +129,7 @@ export default {
     gethomemultidata() {
       gethomemultidata().then(res => {
         this.banner = res.data.banner.list;
-        this.recommend = res.data.recommend.list
+        this.recommend = res.data.recommend.list;
       });
     },
     gethomedata(type) {
@@ -148,7 +137,7 @@ export default {
       gethomedata(type, page).then(res => {
         this.goods[type].list.push(...res.data.list);
         this.goods[type].page += 1;
-        this.$refs.scroll.finishPullUp()
+        this.$refs.scroll.finishPullUp();
       });
     }
   }

@@ -31,23 +31,27 @@ export default {
 
 <style scoped>
 .paramsInfo{
-  margin: 0 10px
+  padding: 0 10px;
+  padding-bottom: 30px;
+  border-bottom: 6px solid #dddddd
 }
 table tr{
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 }
 table{
   width:100%
 }
 table tr td{
-  padding:20px 10px;
+  padding:20px 2px;
   font-size: 14px;
 }
 .table1 td:first-child{
-  padding-right: 80px
+  padding-right: 50px;
+  white-space: nowrap;
 }
 .table2 td:first-child{
-  padding-right: 70px
+  padding-right: 70px;
+  white-space: nowrap;
 }
 .table2 td:last-child{
   color: red
