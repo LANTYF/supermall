@@ -16,7 +16,7 @@
       </div>
     </div>
     <div class="tabbar-right">
-      <div class="left">加入购物车</div>
+      <div class="left" @click="cartClick">加入购物车</div>
       <div class="right">购买</div>
     </div>
   </div>
@@ -24,14 +24,19 @@
 
 <script>
 export default {
-  name: "DetailTabBar"
+  name: "DetailTabBar",
+  methods:{
+    cartClick() {
+      this.$emit('cartClick')
+    }
+  }
 };
 </script>
 
 <style scoped>
 .tabbar {
   position: fixed;
-  z-index: 9;
+  z-index: 10;
   bottom: 0;
   width: 100%;
   background-color: #ffffff;
@@ -64,7 +69,7 @@ export default {
   width: 22px;
   background-image: url(~assets/img/detail/detail_bottom.png);
   background-size: 100%;
-  margin: 4px 0 2px 16px;
+  margin: 4px 0 2px 20px;
 }
 .customer i {
   background-position: 0px -52px;

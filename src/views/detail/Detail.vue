@@ -12,7 +12,7 @@
       <GoodsList :goods="recommends" ref="recommends"></GoodsList>
     </Scroll>
     <BackTop @click.native="topClick" v-show="isShow" />
-    <DetailTabBar></DetailTabBar>
+    <DetailTabBar @cartClick="cartClick"></DetailTabBar>
   </div>
 </template>
 
@@ -26,7 +26,7 @@ import DetailShop from "./childdetail/DetailShop";
 import DetailInfo from "./childdetail/DetailInfo";
 import DetailParams from "./childdetail/DetailParams";
 import DetailComments from "./childdetail/DetailComments";
-import DetailTabBar from "./childdetail/DetailTabBar"
+import DetailTabBar from "./childdetail/DetailTabBar";
 import GoodsList from "components/content/goods/GoodsList";
 import {
   getDetailData,
@@ -36,7 +36,7 @@ import {
   Comments,
   getRecommend
 } from "network/detail.js";
-import { itemLoadMixin , backTopMixin} from "common/mixin";
+import { itemLoadMixin, backTopMixin } from "common/mixin";
 
 export default {
   name: "Detail",
@@ -51,7 +51,7 @@ export default {
       comments: {},
       recommends: [],
       positionY: [],
-      currentIndex: 0
+      currentIndex: 0,
     };
   },
   components: {
@@ -72,6 +72,7 @@ export default {
     this.iid = this.$route.params.iid;
     getDetailData(this.iid).then(res => {
       //获取轮播图的图片
+      console.log(res);
       const data = res.result;
       this.topImages = data.itemInfo.topImages;
       //获取商品信息相关
@@ -97,7 +98,7 @@ export default {
       });
     });
   },
-  mixins: [itemLoadMixin,backTopMixin],
+  mixins: [itemLoadMixin, backTopMixin],
   destroyed() {
     this.$bus.$off("itemLoad", this.itemListener);
   },
@@ -117,14 +118,33 @@ export default {
       for (let i = 0; i < this.positionY.length - 1; i++) {
         if (
           this.currentIndex !== i &&
-          -position.y > this.positionY[i] &&
+          -position.y >= this.positionY[i] &&
           -position.y < this.positionY[i + 1]
         ) {
           this.currentIndex = i;
-          this.$refs.navbar.currentIndex = this.currentIndex;
+          this.$refs.navbar.currentIndex = this.currentIndex
         }
       }
-      this.isShow = -position.y > 1000
+      this.isShow = -position.y > 1000;
+    },
+    cartClick() {
+      const product = {}
+      product.title = this.goods.title
+      product.desc = this.goods.desc
+      product.iid = this.iid
+      product.image = this.topImages[0]
+      product.price = this.goods.lowNowPrice
+      this.$store.dispatch('addCart',product).then(res => {
+        //第一种方法
+        // this.$refs.toast.isShow = true
+        // this.message = res
+        // setTimeout(() => {
+        // this.$refs.toast.isShow = false
+        // this.message = ''
+        // },1000)
+        //第二种方法
+        this.$toast.show(res,2000)
+      })
     }
   }
 };
@@ -133,10 +153,12 @@ export default {
 <style scoped>
 #detail {
   height: 100vh;
+  width: 100vw;
   position: relative;
 }
 .wrapper {
   position: absolute;
+  width: 100%;
   top: 44px;
   bottom: 49px;
   overflow: hidden;

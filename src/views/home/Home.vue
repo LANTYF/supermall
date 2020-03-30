@@ -127,18 +127,30 @@ export default {
      * 网络请求相关
      */
     gethomemultidata() {
-      gethomemultidata().then(res => {
+      // gethomemultidata().then(res => {
+      //   this.banner = res.data.banner.list;
+      //   this.recommend = res.data.recommend.list;
+      // });
+      ;(async  () => {
+        const res = await gethomemultidata()
         this.banner = res.data.banner.list;
         this.recommend = res.data.recommend.list;
-      });
+      })()
     },
     gethomedata(type) {
-      const page = this.goods[type].page + 1;
-      gethomedata(type, page).then(res => {
-        this.goods[type].list.push(...res.data.list);
-        this.goods[type].page += 1;
-        this.$refs.scroll.finishPullUp();
-      });
+      // const page = this.goods[type].page + 1;
+      // gethomedata(type, page).then(res => {
+      //   this.goods[type].list.push(...res.data.list);
+      //   this.goods[type].page += 1;
+      //   this.$refs.scroll.finishPullUp();
+      // });
+      const page = this.goods[type].page + 1
+      ;(async () => {
+         const res = await gethomedata(type, page)
+         this.goods[type].list.push(...res.data.list);
+         this.goods[type].page += 1;
+         this.$refs.scroll.finishPullUp();
+      })()
     }
   }
 };
